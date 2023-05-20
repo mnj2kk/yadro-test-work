@@ -21,10 +21,8 @@ func main() {
 	dataFile, jsonErr := os.ReadFile(fmt.Sprintf("cmd/config/%s.json", os.Getenv("CONFIG")))
 	handler.Handle(jsonErr)
 
-	array, err := reader.Read(arguments[0])
-	handler.Handle(err)
-
+	array := reader.Read(arguments[0])
 	result := sorting.Sort(array, structures.Parse(structures.Build(dataFile)))
 
-	handler.Handle(writer.Write(arguments[1], result))
+	writer.Write(arguments[1], result)
 }

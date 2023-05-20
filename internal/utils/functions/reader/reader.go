@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func Read(path string) (array []string, err error) {
+func Read(path string) (array []string) {
 	file, openErr := os.Open(path)
 	handler.Handle(openErr)
 	defer func(file *os.File) {

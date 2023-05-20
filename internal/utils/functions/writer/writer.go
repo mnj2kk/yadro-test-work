@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func Write(path string, output structures.Result) (err error) {
+func Write(path string, output structures.Result) {
 	file, createErr := os.Create(path)
 	handler.Handle(createErr)
 	defer func(file *os.File) {
