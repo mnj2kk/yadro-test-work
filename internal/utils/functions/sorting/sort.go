@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-func Sort(array []string, compares ...func(a, b structures.Pair[string, int]) bool) structures.Result {
+func Sort(array []string, compares ...func(a, b structures.Pair[string, int]) bool) (result structures.Result) {
 	compare := func(a, b structures.Pair[string, int]) bool {
 		return a.First < b.First
 	}
@@ -14,12 +14,11 @@ func Sort(array []string, compares ...func(a, b structures.Pair[string, int]) bo
 	}
 
 	if len(array) == 0 {
-		return make([]structures.Pair[string, int], 0)
+		return
 	}
 	sort.Strings(array)
 	count := structures.Pair[string, int]{First: array[0], Second: 1}
 
-	result := make([]structures.Pair[string, int], 0)
 	for i := 1; i < len(array); i++ {
 		if count.First == array[i] {
 			count.Second++
@@ -33,5 +32,5 @@ func Sort(array []string, compares ...func(a, b structures.Pair[string, int]) bo
 	sort.SliceStable(result, func(i, j int) bool {
 		return compare(result[i], result[j])
 	})
-	return result
+	return
 }

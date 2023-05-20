@@ -1,6 +1,9 @@
 package structures
 
-import "encoding/json"
+import (
+	"YadroTestWork/internal/utils/functions/handler"
+	"encoding/json"
+)
 
 type Config struct {
 	Type   string  `json:"type"`
@@ -53,9 +56,6 @@ func (c Config) Parse() func(a, b Pair[string, int]) bool {
 }
 
 func Build(data []byte) (config Config) {
-	err := json.Unmarshal(data, &config)
-	if err != nil {
-		return Config{}
-	}
+	handler.Handle(json.Unmarshal(data, &config))
 	return
 }

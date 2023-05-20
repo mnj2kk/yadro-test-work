@@ -1,23 +1,16 @@
 package reader
 
 import (
+	"YadroTestWork/internal/utils/functions/handler"
 	"bufio"
 	"os"
 )
 
 func Read(path string) (array []string, err error) {
-	array = make([]string, 0)
-
 	file, openErr := os.Open(path)
-	if openErr != nil {
-		err = openErr
-		return
-	}
+	handler.Handle(openErr)
 	defer func(file *os.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			err = closeErr
-		}
+		handler.Handle(file.Close())
 	}(file)
 
 	scanner := bufio.NewScanner(file)

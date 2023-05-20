@@ -1,6 +1,7 @@
 package writer
 
 import (
+	"YadroTestWork/internal/utils/functions/handler"
 	"YadroTestWork/internal/utils/structures"
 	"bufio"
 	"fmt"
@@ -9,28 +10,18 @@ import (
 
 func Write(path string, output structures.Result) (err error) {
 	file, createErr := os.Create(path)
-	if createErr != nil {
-		return createErr
-	}
+	handler.Handle(createErr)
 	defer func(file *os.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			err = closeErr
-			return
-		}
+		handler.Handle(file.Close())
 	}(file)
 
 	writer := bufio.NewWriter(file)
 	for _, kv := range output {
 		_, outErr := fmt.Fprintf(writer, "%s: %d\n", kv.First, kv.Second)
-		if outErr != nil {
-			return outErr
-		}
+		handler.Handle(outErr)
 	}
 
 	flushErr := writer.Flush()
-	if flushErr != nil {
-		return flushErr
-	}
+	handler.Handle(flushErr)
 	return
 }
