@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"YadroTestWork/internal/utils/functions/sort"
+	"YadroTestWork/internal/utils/functions/sorting"
 	"YadroTestWork/test/resources"
 	"encoding/json"
 	"fmt"
@@ -23,7 +23,7 @@ func getJson(t *testing.T, name string) (data resources.Data, expected resources
 
 func Run(t *testing.T, name string) {
 	data, expected := getJson(t, name)
-	result := sort.Sort(data.Names)
+	result := sorting.Sort(data.Names)
 	assert.Equal(t, len(result), expected.Count, "Invalid count of unique names.")
 
 	for _, kv := range result {

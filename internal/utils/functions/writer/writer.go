@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func Write(path string, output []structures.Pair[string, int]) (err error) {
+func Write(path string, output structures.Result) (err error) {
 	file, createErr := os.Create(path)
 	if createErr != nil {
 		return createErr
