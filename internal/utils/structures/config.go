@@ -32,23 +32,23 @@ func intCompare(a, b int) int {
 	return 1
 }
 
-func (c Config) Parse() func(a, b Pair[string, int]) bool {
+func Parse(c Config) func(a, b Pair[string, int]) bool {
 	if c.Else == nil {
 		return func(a, b Pair[string, int]) bool {
 			return c.Return
 		}
 	}
-	next := c.Else.Parse()
-	if c.Type == "second" {
+	next := Parse(*c.Else)
+	if c.Type == "first" {
 		return func(a, b Pair[string, int]) bool {
-			if intCompare(a.Second, b.Second) == c.Value {
+			if stringCompare(a.First, b.First) == c.Value {
 				return c.Return
 			}
 			return next(a, b)
 		}
 	}
 	return func(a, b Pair[string, int]) bool {
-		if stringCompare(a.First, b.First) == c.Value {
+		if intCompare(a.Second, b.Second) == c.Value {
 			return c.Return
 		}
 		return next(a, b)

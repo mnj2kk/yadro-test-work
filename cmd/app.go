@@ -24,7 +24,7 @@ func main() {
 	array, err := reader.Read(arguments[0])
 	handler.Handle(err)
 
-	result := sorting.Sort(array, structures.Build(dataFile).Parse())
+	result := sorting.Sort(array, structures.Parse(structures.Build(dataFile)))
 
 	handler.Handle(writer.Write(arguments[1], result))
 }
