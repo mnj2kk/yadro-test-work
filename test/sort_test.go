@@ -6,16 +6,13 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
-	testCase := utils.WrapTest{Name: "empty"}
-	testCase.Run(t)
+	utils.Run(t, "empty")
 }
 
 func TestSample(t *testing.T) {
-	testCase := utils.WrapTest{Name: "sample"}
-	testCase.Run(t)
+	utils.Run(t, "sample")
 }
 
 func TestLarge(t *testing.T) {
-	testCase := utils.WrapTest{Name: "large"}
-	testCase.Run(t)
+	utils.Run(t, "large")
 }
