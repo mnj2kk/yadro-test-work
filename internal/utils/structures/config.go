@@ -3,6 +3,7 @@ package structures
 import (
 	"YadroTestWork/internal/utils/functions/handler"
 	"encoding/json"
+	"strings"
 )
 
 type Config struct {
@@ -12,22 +13,12 @@ type Config struct {
 	Else   *Config `json:"else"`
 }
 
-func stringCompare(a, b string) int {
-	if a < b {
-		return -1
-	}
+func compare(a, b int) int {
 	if a == b {
 		return 0
 	}
-	return 1
-}
-
-func intCompare(a, b int) int {
 	if a < b {
 		return -1
-	}
-	if a == b {
-		return 0
 	}
 	return 1
 }
@@ -41,14 +32,14 @@ func Parse(c Config) func(a, b Pair[string, int]) bool {
 	next := Parse(*c.Else)
 	if c.Type == "first" {
 		return func(a, b Pair[string, int]) bool {
-			if stringCompare(a.First, b.First) == c.Value {
+			if strings.Compare(a.First, b.First) == c.Value {
 				return c.Return
 			}
 			return next(a, b)
 		}
 	}
 	return func(a, b Pair[string, int]) bool {
-		if intCompare(a.Second, b.Second) == c.Value {
+		if compare(a.Second, b.Second) == c.Value {
 			return c.Return
 		}
 		return next(a, b)
