@@ -13,7 +13,6 @@ func Read(path string) (array []string, err error) {
 		err = openErr
 		return
 	}
-
 	defer func(file *os.File) {
 		closeErr := file.Close()
 		if closeErr != nil {
@@ -23,10 +22,8 @@ func Read(path string) (array []string, err error) {
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-
 	for scanner.Scan() {
 		array = append(array, scanner.Text())
 	}
-
 	return
 }

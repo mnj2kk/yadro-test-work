@@ -21,7 +21,6 @@ func Write(path string, output []structures.Pair[string, int]) (err error) {
 	}(file)
 
 	writer := bufio.NewWriter(file)
-
 	for _, kv := range output {
 		_, outErr := fmt.Fprintf(writer, "%s: %d\n", kv.First, kv.Second)
 		if outErr != nil {
@@ -33,6 +32,5 @@ func Write(path string, output []structures.Pair[string, int]) (err error) {
 	if flushErr != nil {
 		return flushErr
 	}
-
 	return
 }

@@ -13,18 +13,17 @@ import (
 func getJson(t *testing.T, name string) (data resources.Data, expected resources.Expected) {
 	dataFile, dataErr := os.ReadFile(fmt.Sprintf("resources/data/%s.json", name))
 	assert.NoErrorf(t, dataErr, "Can't read file resources/data/%s.json", name)
-	_ = json.Unmarshal(dataFile, &data)
+	assert.NoErrorf(t, json.Unmarshal(dataFile, &data), "Invalid json of resources/data/%s.json", name)
 
 	expectedFile, expectedErr := os.ReadFile(fmt.Sprintf("resources/expected/%s.json", name))
 	assert.NoErrorf(t, expectedErr, "Can't read file resources/expected/%s.json", name)
-	_ = json.Unmarshal(expectedFile, &expected)
+	assert.NoErrorf(t, json.Unmarshal(expectedFile, &expected), "Invalid json of resources/expected/%s.json", name)
 	return
 }
 
 func Run(t *testing.T, name string) {
 	data, expected := getJson(t, name)
 	result := sort.Sort(data.Names)
-
 	assert.Equal(t, len(result), expected.Count, "Invalid count of unique names.")
 
 	for _, kv := range result {

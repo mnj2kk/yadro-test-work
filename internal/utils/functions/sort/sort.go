@@ -13,7 +13,6 @@ func Sort(array []string) []structures.Pair[string, int] {
 	count := structures.Pair[string, int]{First: array[0], Second: 1}
 
 	result := make([]structures.Pair[string, int], 0)
-
 	for i := 1; i < len(array); i++ {
 		if count.First == array[i] {
 			count.Second++
@@ -24,6 +23,5 @@ func Sort(array []string) []structures.Pair[string, int] {
 		}
 	}
 	result = append(result, count)
-
 	return result
 }
