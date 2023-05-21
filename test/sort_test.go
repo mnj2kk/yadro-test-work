@@ -16,7 +16,29 @@ import (
 	"time"
 )
 
-var RNG = rand.New(mt19937.New())
+var (
+	rng     = rand.New(mt19937.New())
+	configs = map[string]func(a, b structures.Pair[string, int]) bool{
+		"desc-count-desc-names": func(a, b structures.Pair[string, int]) bool {
+			if a.Second < b.Second {
+				return true
+			}
+			if a.Second > b.Second {
+				return false
+			}
+			return a.First < b.First
+		},
+		"asc-count-desc-names": func(a, b structures.Pair[string, int]) bool {
+			if a.Second > b.Second {
+				return true
+			}
+			if a.Second < b.Second {
+				return false
+			}
+			return a.First < b.First
+		},
+	}
+)
 
 const (
 	RandomTestNumber = 17
@@ -86,15 +108,30 @@ func fileRun(s *TestSuite, name string) {
 
 func getNames(suite *TestSuite, size int) (result []string) {
 	for i := 0; i < size; i++ {
-		result = append(result, suite.names[RNG.Intn(len(suite.names))])
+		result = append(result, suite.names[rng.Intn(len(suite.names))])
 	}
 	return
 }
 
 func randomCheck(suite *TestSuite, MAX int) {
 	for i := 0; i < RandomTestNumber; i++ {
-		names := getNames(suite, RNG.Intn(MAX-1)+1)
+		names := getNames(suite, rng.Intn(MAX-1)+1)
 		dataRun(suite, names)
+	}
+}
+
+func configCheck(suite *TestSuite, MAX int, name string) {
+	dataFile, jsonErr := os.ReadFile(fmt.Sprintf("resources/configs/%s.json", name))
+	handler.Handle(jsonErr)
+
+	compare := structures.Parse(structures.Build(dataFile))
+
+	for i := 0; i < RandomTestNumber; i++ {
+		names := getNames(suite, rng.Intn(MAX-1)+1)
+		actual := sorting.Sort(names, configs[name])
+		expected := sorting.Sort(names, compare)
+
+		suite.Equalf(actual, expected, "Wrong config.")
 	}
 }
 
@@ -117,7 +154,7 @@ func (suite *TestSuite) SetupSuite() {
 }
 
 func (suite *TestSuite) SetupTest() {
-	RNG.Seed(time.Now().UnixNano())
+	rng.Seed(time.Now().UnixNano())
 }
 
 func (suite *TestSuite) TestEmpty() {
@@ -142,4 +179,28 @@ func (suite *TestSuite) TestMediumRandom() {
 
 func (suite *TestSuite) TestLargeRandom() {
 	randomCheck(suite, Large)
+}
+
+func (suite *TestSuite) TestSmallFirstSortConfig() {
+	configCheck(suite, Small, "desc-count-desc-names")
+}
+
+func (suite *TestSuite) TestSmallSecondSortConfig() {
+	configCheck(suite, Small, "asc-count-desc-names")
+}
+
+func (suite *TestSuite) TestMediumFirstSortConfig() {
+	configCheck(suite, Medium, "desc-count-desc-names")
+}
+
+func (suite *TestSuite) TestMediumSecondSortConfig() {
+	configCheck(suite, Medium, "asc-count-desc-names")
+}
+
+func (suite *TestSuite) TestLargeFirstSortConfig() {
+	configCheck(suite, Large, "desc-count-desc-names")
+}
+
+func (suite *TestSuite) TestLargeSecondSortConfig() {
+	configCheck(suite, Large, "asc-count-desc-names")
 }

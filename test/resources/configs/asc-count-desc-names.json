@@ -1,0 +1,11 @@
+{
+  "type": "second",
+  "value": 1,
+  "return": true,
+  "else": {
+    "type": "first",
+    "value": -1,
+    "return": true,
+    "else": {}
+  }
+}
